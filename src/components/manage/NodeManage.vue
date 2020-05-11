@@ -194,7 +194,7 @@
               <el-tag size="mini" class="pointer" type="info" v-else>{{ scope.row.flags }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="inCluster" label="In Cluster" align="center" sortable>
+          <!-- <el-table-column prop="inCluster" label="In Cluster" align="center" sortable>
             <template slot-scope="scope">
               <i class="el-icon-success status-icon normal-status" v-if="scope.row.inCluster"></i>
               <i class="el-icon-error status-icon normal-bad" v-else></i>
@@ -205,7 +205,7 @@
               <i class="el-icon-success status-icon normal-status" v-if="scope.row.runStatus"></i>
               <i class="el-icon-error status-icon normal-bad" v-else></i>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="host" label="Host" sortable></el-table-column>
           <el-table-column prop="port" label="Port" sortable></el-table-column>
           <el-table-column

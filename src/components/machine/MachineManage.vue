@@ -5,7 +5,6 @@
     <div class="batch-operation-wrapper">
       <div class="batch-title">Batch Operation</div>
       <el-row>
-        <el-button size="mini" type="danger" @click="handleDeleteBatch()">Delete</el-button>
         <el-button
         size="mini"
         type="success"
