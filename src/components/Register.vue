@@ -2,12 +2,7 @@
   <!--background-color: #f0f2f5; background-image: linear-gradient(0deg,#04c0c6,#2ba3de 51%,#835be3); -->
   <div>
     <el-form :model="user" :rules="rules" ref="user">
-      <el-form-item prop="userRole" label="User Role">
-          <el-select v-model="user.userRole" placeholder="Please select user role">
-            <el-option label="Admin" :value="1" ></el-option>
-            <el-option label="Super Admin" :value="0" ></el-option>
-          </el-select>
-      </el-form-item>
+
 
       <el-form-item prop="userName">
         <el-input prefix-icon="el-icon-user" v-model.trim="user.userName" placeholder="User Name"></el-input>
@@ -139,6 +134,7 @@ console.log(this.user);
         this.$refs[user].validate(valid => {
         if (valid) {
           this.user.groupId = 1;
+          this.user.userRole=0;
           console.log(this.user);
           let url = "/user/addUser";
           
