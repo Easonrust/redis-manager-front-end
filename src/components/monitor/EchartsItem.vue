@@ -108,6 +108,9 @@ export default {
           axisPointer: {
             type: 'cross'
           },
+          label: {
+            backgroundColor: '#6a7985'
+          },
           padding: [5, 10],
           position: function (pos, params, dom, rect, size) {
             var obj = { top: -10 }
@@ -121,13 +124,15 @@ export default {
           }
         },
         xAxis: {
-          data: this.echartsItemDataxAxis
+          type: 'category',
+          data: this.echartsItemDataxAxis,
+          boundaryGap: false
         },
-        yAxis: {
-          axisTick: {
-            show: true
+        yAxis: [
+          {
+            type: 'value'
           }
-        },
+        ],
         series: series
       })
       // 监听容器宽度变化
@@ -189,13 +194,13 @@ export default {
             }
           },
           smooth: true,
-          type: 'bar',
+          type: 'line',
+          stack: '总量',
           data: oneNodeData.data,
           animationDuration: 2800,
           animationEasing: 'cubicInOut',
-          symbol: 'none'
           // 背景色
-          // areaStyle: {}
+          areaStyle: {}
         })
       }
       return series

@@ -160,7 +160,9 @@
       <div class="table-wrapper">
         <!-- default-expand-all -->
         <el-table
+          lazy
           :data="redisNodeList"
+          border
           style="width: 100%; margin-bottom: 10px;"
           row-key="nodeId"
           size="medium"
@@ -169,31 +171,26 @@
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
           :default-expand-all="true"
         >
-          <!-- @selection-change="handleSelectionChange"
-          <el-table-column type="selection" width="55px"></el-table-column>-->
-          <!-- status 有多种 -->
-          <el-table-column label="Link State" sortable width="150px">
-            <template slot-scope="scope">
-              {{ scope.row.slot }}
-              <el-tag
-                size="mini"
-                type="success"
-                v-if="scope.row.linkState == 'connected'"
-              >{{ scope.row.linkState }}</el-tag>
-              <el-tag size="small" class="pointer" v-else type="warning">{{ scope.row.linkState }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="Flags" width="90px">
+
+
+          <el-table-column width="190px">
             <template slot-scope="scope">
               <el-tag size="mini" v-if="scope.row.flags == 'master'">
                 {{ scope.row.flags }}
-                <span
-                  v-if="scope.row.replicaNumber > 0"
-                >[{{scope.row.replicaNumber }}]</span>
+                <!--<span-->
+                  <!--v-if="scope.row.replicaNumber > 0"-->
+                <!--&gt;[{{scope.row.replicaNumber }}]</span>-->
               </el-tag>
               <el-tag size="mini" class="pointer" type="info" v-else>{{ scope.row.flags }}</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="host" label="Host" sortable></el-table-column>
+          <el-table-column prop="port" label="Port" sortable></el-table-column>
+          <!-- @selection-change="handleSelectionChange"
+          <el-table-column type="selection" width="55px"></el-table-column>-->
+          <!-- status 有多种 -->
+
+
           <!-- <el-table-column prop="inCluster" label="In Cluster" align="center" sortable>
             <template slot-scope="scope">
               <i class="el-icon-success status-icon normal-status" v-if="scope.row.inCluster"></i>
@@ -206,8 +203,7 @@
               <i class="el-icon-error status-icon normal-bad" v-else></i>
             </template>
           </el-table-column> -->
-          <el-table-column prop="host" label="Host" sortable></el-table-column>
-          <el-table-column prop="port" label="Port" sortable></el-table-column>
+
           <el-table-column
             prop="slotRange"
             label="Slot Range"
@@ -219,6 +215,19 @@
               <el-tag size="mini" v-if="scope.row.slotRange != null">{{ scope.row.slotNumber }}</el-tag>
             </template>
           </el-table-column>
+
+          <el-table-column label="State" sortable width="200px">
+            <template slot-scope="scope">
+              {{ scope.row.slot }}
+              <el-tag
+                size="mini"
+                type="success"
+                v-if="scope.row.linkState == 'OK'"
+              >{{ scope.row.linkState }}</el-tag>
+              <el-tag size="small" class="pointer" v-else type="warning">OK</el-tag>
+            </template>
+          </el-table-column>
+
           <!-- <el-table-column label="Meta" width="130px;">
             <template slot-scope="scope">
               <el-tag size="mini" class="pointer" @click="getNodeInfo(scope.row)">Info</el-tag>
@@ -1559,6 +1568,15 @@ export default {
 .refresh:hover {
   color: #2c3e50;
 }
+
+ .el-table .warning-row {
+   background: oldlace;
+ }
+
+.el-table .success-row {
+  background: #f0f9eb;
+ }
+
 
 .dialog-footer {
   display: flex;

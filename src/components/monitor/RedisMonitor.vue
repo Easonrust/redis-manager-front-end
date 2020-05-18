@@ -533,7 +533,7 @@ export default {
       } else {
         this.timer = setInterval(() => {
           this.refresh()
-        }, 6000 * 5)
+        }, 3000 * 5)
       }
     },
     refresh () {

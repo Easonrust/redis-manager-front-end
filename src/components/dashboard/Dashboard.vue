@@ -109,12 +109,12 @@
               Sentinel Masters:
               <el-tag size="mini">{{ cluster.sentinelMasters }}</el-tag>
             </div>
-            <div class="text item" v-if="cluster.redisMode == 'cluster'">
-              Slots Assigned(ok/assigned):
-              <el-tag size="mini">
-                {{ cluster.clusterSlotsOk }}/{{ cluster.clusterSlotsAssigned }}
-              </el-tag>
-            </div>
+            <!--<div class="text item" v-if="cluster.redisMode == 'cluster'">-->
+              <!--Slots Assigned(ok/assigned):-->
+              <!--<el-tag size="mini">-->
+                <!--{{ cluster.clusterSlotsOk }}/{{ cluster.clusterSlotsAssigned }}-->
+              <!--</el-tag>-->
+            <!--</div>-->
             <div class="text item" v-if="cluster.redisMode == 'standalone'">
               DB Size:
               <el-tag size="mini">{{ cluster.dbSize }}</el-tag>

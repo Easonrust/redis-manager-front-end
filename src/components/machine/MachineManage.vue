@@ -1,15 +1,19 @@
 <template>
   <div class="body-wrapper">
-
-
     <div class="batch-operation-wrapper">
-      <div class="batch-title">Batch Operation</div>
+      <!--<div class="batch-title">Batch Operation</div>-->
       <el-row>
+        <!-- <el-button size="mini" type="danger" @click="handleDeleteBatch()"
+          >Delete</el-button
+        >-->
         <el-button
-        size="mini"
-        type="success"
-        @click="editMachineVisible = true; isUpdate = false, machines={ hostList: [{ value: '' }]}"
-      >Import Machine</el-button>
+          size="mini"
+          type="success"
+          @click="
+            editMachineVisible = true;
+            (isUpdate = false), (machines = { hostList: [{ value: '' }] });
+          "
+        >Import Machine</el-button>
       </el-row>
     </div>
     <div>
@@ -19,12 +23,12 @@
         style="width: 100%"
         center
         @selection-change="handleSelectionChange"
-        :default-sort="{prop: 'machineGroupName', order: 'ascending'}"
+        :default-sort="{ prop: 'machineGroupName', order: 'ascending' }"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column
           property="machineGroupName"
-          label="Machine Group Name"
+          label="ID"
           width="200"
           sortable
         ></el-table-column>
@@ -62,7 +66,7 @@
       v-loading="saveMachineLoading"
     >
       <el-form :model="machines" ref="machines" :rules="rules" size="small" label-width="135px">
-        <el-form-item label="Machine Group" prop="machineGroupName">
+        <el-form-item label="Machine Group" prop="1" hidden="true">
           <el-select
             v-model="machines.machineGroupName"
             filterable
@@ -82,7 +86,7 @@
           <el-input v-model="machines.userName"></el-input>
         </el-form-item>
         <el-form-item label="Password" prop="password">
-          <el-input v-model="machines.password"></el-input>
+          <el-input v-model="machines.password" type="password" show-password></el-input>
         </el-form-item>
         <el-form-item label="SSH Port" prop="sshPort">
           <el-input v-model.number="machines.sshPort"></el-input>
@@ -106,6 +110,23 @@
 
         <el-form-item label="Machine Info" prop="machineInfo">
           <el-input v-model="machines.machineInfo" maxlength="50" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="ca.pem" prop="capem">
+          <el-upload id="upload" action :http-request="uploadCapem" :multiple="false">
+            <el-button size="mini" type="primary">upload ca.pem</el-button>
+          </el-upload>
+        </el-form-item>
+
+        <el-form-item label="cert.pem" prop="certpem">
+          <el-upload id="upload" action :http-request="uploadCertpem" :multiple="false">
+            <el-button size="mini" type="primary">upload cert.pem</el-button>
+          </el-upload>
+        </el-form-item>
+
+        <el-form-item label="key.pem" prop="keypem">
+          <el-upload id="upload" action :http-request="uploadKeypem" :multiple="false">
+            <el-button size="mini" type="primary">upload key.pem</el-button>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -274,6 +295,72 @@ export default {
     };
   },
   methods: {
+    uploadCapem(item) {
+      // Create new formData object
+      const fd = new FormData();
+      // append the file you want to upload
+      fd.append("fileName", item.file);
+      let url = "/node-manage/importCa";
+      API.post(
+        url,
+        fd,
+        response => {
+          let result = response.data;
+          if (result.code == 0) {
+            this.humpbackImages = result.data;
+          } else {
+            message.error(result.message);
+          }
+        },
+        err => {
+          message.error(err);
+        }
+      );
+    },
+    uploadCertpem(item) {
+      // Create new formData object
+      const fd = new FormData();
+      // append the file you want to upload
+      fd.append("fileName", item.file);
+      let url = "/node-manage/importCert";
+      API.post(
+        url,
+        fd,
+        response => {
+          let result = response.data;
+          if (result.code == 0) {
+            this.humpbackImages = result.data;
+          } else {
+            message.error(result.message);
+          }
+        },
+        err => {
+          message.error(err);
+        }
+      );
+    },
+    uploadKeypem(item) {
+      // Create new formData object
+      const fd = new FormData();
+      // append the file you want to upload
+      fd.append("fileName", item.file);
+      let url = "/node-manage/importKey";
+      API.post(
+        url,
+        fd,
+        response => {
+          let result = response.data;
+          if (result.code == 0) {
+            this.humpbackImages = result.data;
+          } else {
+            message.error(result.message);
+          }
+        },
+        err => {
+          message.error(err);
+        }
+      );
+    },
     getMachineList(groupId) {
       if (isEmpty(groupId)) {
         return;
@@ -291,7 +378,7 @@ export default {
             });
             this.machineList = machineList;
           } else {
-           message.error("Get machine list failed");
+            message.error("Get machine list failed");
           }
         },
         err => {
@@ -334,7 +421,7 @@ export default {
       hostList.forEach(host => {
         machineList.push({
           groupId: this.currentGroupId,
-          machineGroupName: machineGroupName,
+          machineGroupName: 1,
           userName: userName,
           password: password,
           token: token,

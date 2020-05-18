@@ -1,7 +1,7 @@
 <template>
   <div id="installation" class="body-wrapper">
     <el-row type="flex" class="row-bg" justify="center">
-      <el-col  v-loading="installationLoading">
+      <el-col v-loading="installationLoading">
         <h1>Cluster Installation</h1>
         <div class="form-wrapper">
           <div class="form">
@@ -13,16 +13,11 @@
               class="demo-ruleForm"
               size="medium"
             >
-
               <el-form-item label="Cluster Name" prop="clusterName">
-                <el-input v-model="installationParam.clusterName" maxlength="50" show-word-limit></el-input>
+                <el-input v-model="installationParam.clusterName" show-word-limit></el-input>
               </el-form-item>
               <el-form-item label="Redis Password" prop="redisPassword">
-                <el-input
-                  v-model.trim="installationParam.redisPassword"
-                  maxlength="50"
-                  show-word-limit
-                ></el-input>
+                <el-input v-model.trim="installationParam.redisPassword" show-word-limit></el-input>
               </el-form-item>
               <!-- <el-form-item label="Redis Mode" prop="redisMode">
                 <el-radio-group v-model="installationParam.redisMode">
@@ -101,6 +96,20 @@
               </el-form-item>-->
               <!-- auto install start -->
 
+              <el-form-item label="Upload redis.conf">
+                <el-upload
+                  class="upload-demo"
+                  drag
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  multiple
+                >
+                  <i class="el-icon-upload"></i>
+                  <div class="el-upload__text">
+                    <em>click to upload</em>
+                  </div>
+                </el-upload>
+              </el-form-item>
+
               <el-form-item label="Machine List" prop="machines" v-if="installationParam.autoBuild">
                 <div class="block">
                   <el-cascader
@@ -115,27 +124,33 @@
                 </div>
               </el-form-item>
 
-              <el-form-item label="Start Port" prop="startPort" v-if="installationParam.autoBuild">
-                <el-input v-model.number="installationParam.startPort"></el-input>
+              <el-form-item label="Master Port" prop="startPort" v-if="installationParam.autoBuild">
+                <el-input
+                  v-model="installationParam.startPort"
+                  placeholder="e.g. 10001,10002,10003"
+                ></el-input>
               </el-form-item>
-              <el-form-item label="End Port" >
-                <el-input v-model="endPort"></el-input>
+              <el-form-item label="Slave Port">
+                <el-input
+                  v-model="installationParam.replicaNumber"
+                  placeholder="e.g. 10004,10005,10006"
+                ></el-input>
               </el-form-item>
 
-              <el-form-item
-                label="Master Number"
-                prop="masterNumber"
-                v-if="installationParam.autoBuild"
-              >
-                <el-input v-model.number="installationParam.masterNumber"></el-input>
-              </el-form-item>
-              <el-form-item
-                label="Replica Number"
-                prop="replicaNumber"
-                v-if="installationParam.autoBuild"
-              >
-                <el-input v-model.number="installationParam.replicaNumber"></el-input>
-              </el-form-item>
+              <!--<el-form-item-->
+              <!--label="Master Number"-->
+              <!--prop="masterNumber"-->
+              <!--v-if="installationParam.autoBuild"-->
+              <!--&gt;-->
+              <!--<el-input v-model.number="installationParam.masterNumber"></el-input>-->
+              <!--</el-form-item>-->
+              <!--<el-form-item-->
+              <!--label="Replica Number"-->
+              <!--prop="replicaNumber"-->
+              <!--v-if="installationParam.autoBuild"-->
+              <!--&gt;-->
+              <!--<el-input v-model.number="installationParam.replicaNumber"></el-input>-->
+              <!--</el-form-item>-->
 
               <!-- auto install end -->
               <!-- custom installation start -->
@@ -196,9 +211,6 @@
                   <i class="el-icon-info info"></i>
                 </el-tooltip>
               </el-form-item>-->
-              <el-form-item label="Cluster Info" prop="clusterInfo">
-                <el-input type="input" v-model="installationParam.clusterInfo"></el-input>
-              </el-form-item>
               <el-form-item>
                 <el-button type="success" @click="installationCheck('installationParam')">Install</el-button>
                 <!-- <el-button @click="resetForm('installationParam')">Reset</el-button> -->
@@ -223,7 +235,7 @@
         <span class="param-key">Cluster Name:</span>
         <el-tag size="mini">{{ installationParam.clusterName }}</el-tag>
 
-        
+
       </div>
       <div class="item-param">
         <span class="param-key">Redis Mode:</span>
@@ -319,7 +331,7 @@ export default {
       }
     };
     var validateStartPort = (rule, value, callback) => {
-      if (!validatePort(value)) {
+      if (true) {
         return callback(new Error("Incorrect port format"));
       }
       callback();
@@ -420,7 +432,7 @@ export default {
       callback();
     };
     return {
-      endPort:'',
+      endPort: "",
       dockerImages: [],
       machineImages: [],
       humpbackImages: [],
@@ -446,12 +458,12 @@ export default {
       rules: {
         clusterName: [
           {
-            required: true,
+            // required: true,
             validator: validateClusterName,
             trigger: "blur"
           },
           {
-            required: true,
+            // required: true,
             validator: validateClusterNameCurrentUsed,
             trigger: "blur"
           }
@@ -472,7 +484,7 @@ export default {
         ],
         image: [
           {
-            required: true,
+            // required: true,
             message: "Please select image",
             trigger: "change"
           }
@@ -484,53 +496,54 @@ export default {
             trigger: "change"
           }
         ],
-        startPort: [
-          {
-            required: true,
-            message: "Please enter start port",
-            trigger: "blur"
-          },
-          {
-            required: true,
-            validator: validateStartPort,
-            trigger: "blur"
-          }
-        ],
-        masterNumber: [
-          {
-            required: true,
-            message: "Please eneter master number",
-            trigger: "blur"
-          },
-          {
-            type: "number",
-            message: "Please enter integer",
-            trigger: "blur"
-          },
-          {
-            required: true,
-            validator: validateMasterAndReplicaNumber,
-            trigger: "blur"
-          },
-          {
-            required: true,
-            validator: validateMasterNumber,
-            trigger: "blur"
-          }
-        ],
-        replicaNumber: [
-          {
-            required: true,
-            message: "Please eneter replica number",
-            trigger: "blur"
-          },
-          { type: "number", message: "Please enter integer", trigger: "blur" },
-          {
-            required: true,
-            validator: validateMasterAndReplicaNumber,
-            trigger: "blur"
-          }
-        ],
+        // startPort: [
+        //   {
+        //     required: true,
+        //     message: "Please enter start port",
+        //     trigger: "blur",
+        //
+        //   },
+        //   {
+        //     required: true,
+        //     validator: validateStartPort,
+        //     trigger: "blur"
+        //   }
+        // ],
+        // masterNumber: [
+        //   {
+        //     required: true,
+        //     message: "Please eneter master number",
+        //     trigger: "blur"
+        //   },
+        //   {
+        //     type: "number",
+        //     message: "Please enter integer",
+        //     trigger: "blur"
+        //   },
+        //   {
+        //     required: true,
+        //     validator: validateMasterAndReplicaNumber,
+        //     trigger: "blur"
+        //   },
+        //   {
+        //     required: true,
+        //     validator: validateMasterNumber,
+        //     trigger: "blur"
+        //   }
+        // ],
+        // replicaNumber: [
+        //   {
+        //     required: true,
+        //     message: "Please eneter replica number",
+        //     trigger: "blur"
+        //   },
+        //   { type: "number", message: "Please enter integer", trigger: "blur" },
+        //   {
+        //     required: true,
+        //     validator: validateMasterAndReplicaNumber,
+        //     trigger: "blur"
+        //   }
+        // ],
         machineUserName: [
           {
             required: true,
@@ -567,6 +580,14 @@ export default {
     };
   },
   methods: {
+    toDashboard() {
+      this.installationLoading = false;
+      message.success("Install Successfully");
+      this.$router.push({
+        name: "dashboard",
+        params: { groupId: this.selectGroupId }
+      });
+    },
     handleMachine(val) {
       val.forEach(item => {
         // console.log(item[1]);
@@ -608,6 +629,18 @@ export default {
       });
     },
     install() {
+      this.installationParam.masterNumber = this.installationParam.startPort.split(
+        ","
+      ).length;
+      this.installationParam.replicaNumber = this.installationParam.replicaNumber.split(
+        ","
+      ).length;
+      this.installationParam.replicaNumber =
+        this.installationParam.replicaNumber /
+        this.installationParam.masterNumber;
+      this.installationParam.startPort = this.installationParam.startPort
+        .split(",")
+        .shift();
       this.installationLoading = true;
       // this.step = 0;
       let url = "/installation/installFlow";
@@ -756,8 +789,8 @@ export default {
                 if (log.indexOf("Start saving to database") > -1) {
                   this.step = 6;
                   console.log(6);
-                  this.installationLoading = false;
-                  message.success("Install Successfully")
+
+                  setTimeout(this.toDashboard, 1000);
                 }
               }
             });

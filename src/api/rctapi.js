@@ -30,7 +30,7 @@ function RCTAPI (url, method = 'GET', params = {}) {
     }).catch(err => {
       // reject(err)
       if (err.response && (err.response.code === 401 || err.response.status === 404)) {
-        message.warning('user infomation has expried,please login!')
+        // message.warning('user infomation has expried,please login!')
         // router.push({ name: 'login' })
       }
       return Promise.reject(new Error('error'))
@@ -84,7 +84,7 @@ service.interceptors.response.use(
   },
   error => {
     if (error.response && (error.response.code === 401 || error.response.status === 404)) {
-      message.warning('user infomation has expried,please login!')
+      // message.warning('user infomation has expried,please login!')
       // router.push({ name: 'login' })
     }
     return Promise.reject(new Error('error'))
